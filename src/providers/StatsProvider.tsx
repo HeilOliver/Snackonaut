@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 interface Stats {
     saturation: number;
@@ -46,26 +46,32 @@ const StatsProvider: React.FC = ({ children }) => {
         hydration: 50,
     });
 
-    const setSaturation = useCallback(
-        (saturation: Stats["saturation"]) => {
-            setStats({ ...stats, saturation: clampStat(saturation) });
-        },
-        [stats]
-    );
+    const setSaturation = (saturation: Stats["saturation"]) => {
+        setStats({ ...stats, saturation: clampStat(saturation) });
+    };
 
-    const setHydration = useCallback(
-        (hydration: Stats["hydration"]) => {
-            setStats({ ...stats, hydration: clampStat(hydration) });
-        },
-        [stats]
-    );
+    const setHydration = (hydration: Stats["hydration"]) => {
+        setStats({ ...stats, hydration: clampStat(hydration) });
+    };
 
-    const setEnergy = useCallback(
-        (energy: Stats["energy"]) => {
-            setStats({ ...stats, energy: clampStat(energy) });
-        },
-        [stats]
-    );
+    const setEnergy = (energy: Stats["energy"]) => {
+        setStats({ ...stats, energy: clampStat(energy) });
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const random = Math.random();
+            if (random < 0.33) {
+                setSaturation(stats.saturation - 10);
+            } else if (random < 0.66) {
+                setHydration(stats.hydration - 10);
+            } else {
+                setEnergy(stats.energy - 10);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [stats]);
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
 

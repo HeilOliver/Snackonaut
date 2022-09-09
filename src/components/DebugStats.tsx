@@ -9,7 +9,7 @@ const DebugStats = () => {
     return (
         <HStack space={1}>
             <Button onPress={() => setSaturation(stats.saturation + 10)}>
-                +10 Food
+                +10 Saturation
             </Button>
             <Button onPress={() => setHydration(stats.hydration + 10)}>
                 +10 Hydration
