@@ -1,14 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "./SettingsProvider";
+import Stats from "./StatsType";
 
 const statsKey = "stats";
-
-export interface Stats {
-    saturation: number;
-    hydration: number;
-    energy: number;
-}
 
 interface StatsContextValues {
     stats: Stats;
