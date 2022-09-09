@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 
 interface Stats {
     saturation: number;
@@ -46,17 +46,17 @@ const StatsProvider: React.FC = ({ children }) => {
         hydration: 100,
     });
 
-    const setSaturation = (saturation: Stats["saturation"]) => {
+    const setSaturation = useCallback((saturation: Stats["saturation"]) => {
         setStats({ ...stats, saturation: clampStat(saturation) });
-    };
+    }, []);
 
-    const setHydration = (hydration: Stats["hydration"]) => {
+    const setHydration = useCallback((hydration: Stats["hydration"]) => {
         setStats({ ...stats, hydration: clampStat(hydration) });
-    };
+    }, []);
 
-    const setEnergy = (energy: Stats["energy"]) => {
+    const setEnergy = useCallback((energy: Stats["energy"]) => {
         setStats({ ...stats, energy: clampStat(energy) });
-    };
+    }, []);
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
 
