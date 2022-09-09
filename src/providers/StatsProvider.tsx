@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "./SettingsProvider";
 import Stats from "./StatsType";
+import calculateNewStats from "../services/gameLogic";
 
 const statsKey = "stats";
 
@@ -84,22 +85,19 @@ const StatsProvider: React.FC = ({ children }) => {
     };
 
     useEffect(() => {
-        let interval: NodeJS.Timer | undefined;
+        const gameInterval = setInterval(
+            () => {
+                const newStats = calculateNewStats(stats);
+                setStats({
+                    saturation: clampStat(newStats.saturation),
+                    hydration: clampStat(newStats.hydration),
+                    energy: clampStat(newStats.energy),
+                });
+            },
+            settings.debugMode ? 1000 : 1000 * 60
+        );
 
-        if (settings.debugMode) {
-            interval = setInterval(() => {
-                const random = Math.random();
-                if (random < 0.33) {
-                    setSaturation(stats.saturation - 10);
-                } else if (random < 0.66) {
-                    setHydration(stats.hydration - 10);
-                } else {
-                    setEnergy(stats.energy - 10);
-                }
-            }, 1000);
-        }
-
-        return () => clearInterval(interval);
+        return () => clearInterval(gameInterval);
     }, [stats, settings]);
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
