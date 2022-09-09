@@ -13,6 +13,7 @@ const Settings = () => {
             <HStack space={2} alignItems="center">
                 <Text>Dark</Text>
                 <Switch
+                    isDisabled={true}
                     isChecked={colorMode === "light"}
                     onToggle={toggleColorMode}
                     aria-label={
