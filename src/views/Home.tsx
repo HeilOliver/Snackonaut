@@ -8,6 +8,7 @@ import { Stats } from "../components/Stats";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RootStackParamList from "../types/RootStackParamList";
 import { SettingsContext } from "../providers/SettingsProvider";
+import Snackonout from "../components/Snackonaut";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
     RootStackParamList,
@@ -23,6 +24,7 @@ const Home = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Snackonout/>
             <Stats />
             {settings.debugMode && <DebugStats />}
 

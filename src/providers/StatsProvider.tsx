@@ -4,7 +4,7 @@ import { SettingsContext } from "./SettingsProvider";
 
 const statsKey = "stats";
 
-interface Stats {
+export interface Stats {
     saturation: number;
     hydration: number;
     energy: number;
