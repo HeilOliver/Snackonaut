@@ -5,9 +5,16 @@ import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DebugStats from "../components/DebugStats";
 import { Stats } from "../components/Stats";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import RootStackParamList from "../types/RootStackParamList";
 
-const Home = ({ navigation }) => {
-    const { t } = useTranslation();
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
+
+type Props = {
+    navigation: HomeScreenNavigationProp;
+}
+
+const Home = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={styles.container}>
