@@ -18,6 +18,7 @@ const initialContextValues: StatsContextValues = {
         saturation: 50,
         hydration: 50,
         energy: 50,
+        lastUpdate: 0,
     },
     setSaturation: () => {},
     setHydration: () => {},
@@ -44,6 +45,7 @@ const StatsProvider: React.FC = ({ children }) => {
         saturation: 50,
         energy: 50,
         hydration: 50,
+        lastUpdate: Date.now(),
     });
     const { settings } = useContext(SettingsContext);
 
@@ -73,15 +75,27 @@ const StatsProvider: React.FC = ({ children }) => {
     }, []);
 
     const setSaturation = (saturation: Stats["saturation"]) => {
-        setStats({ ...stats, saturation: clampStat(saturation) });
+        setStats({
+            ...stats,
+            saturation: clampStat(saturation),
+            lastUpdate: Date.now(),
+        });
     };
 
     const setHydration = (hydration: Stats["hydration"]) => {
-        setStats({ ...stats, hydration: clampStat(hydration) });
+        setStats({
+            ...stats,
+            hydration: clampStat(hydration),
+            lastUpdate: Date.now(),
+        });
     };
 
     const setEnergy = (energy: Stats["energy"]) => {
-        setStats({ ...stats, energy: clampStat(energy) });
+        setStats({
+            ...stats,
+            energy: clampStat(energy),
+            lastUpdate: Date.now(),
+        });
     };
 
     useEffect(() => {
@@ -92,6 +106,7 @@ const StatsProvider: React.FC = ({ children }) => {
                     saturation: clampStat(newStats.saturation),
                     hydration: clampStat(newStats.hydration),
                     energy: clampStat(newStats.energy),
+                    lastUpdate: Date.now(),
                 });
             },
             settings.debugMode ? 1000 : 1000 * 60

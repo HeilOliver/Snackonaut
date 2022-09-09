@@ -9,7 +9,10 @@ const calculateNewStats = (stats: Stats): Stats => {
         saturation: stats.saturation - reduction,
         hydration: stats.hydration - reduction,
         energy: stats.energy - 10,
+        lastUpdate: 0,
     };
 };
+
+const offlineProgression = (stats: Stats) => {};
 
 export default calculateNewStats;
