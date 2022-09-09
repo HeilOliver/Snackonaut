@@ -15,9 +15,9 @@ interface StatsContextValues {
 
 const initialContextValues: StatsContextValues = {
     stats: {
-        saturation: 100,
-        hydration: 100,
-        energy: 100,
+        saturation: 50,
+        hydration: 50,
+        energy: 50,
     },
     setSaturation: () => {},
     setHydration: () => {},
@@ -41,22 +41,31 @@ const clampStat = (
 
 const StatsProvider: React.FC = ({ children }) => {
     const [stats, setStats] = useState<Stats>({
-        saturation: 100,
-        energy: 100,
-        hydration: 100,
+        saturation: 50,
+        energy: 50,
+        hydration: 50,
     });
 
-    const setSaturation = useCallback((saturation: Stats["saturation"]) => {
-        setStats({ ...stats, saturation: clampStat(saturation) });
-    }, []);
+    const setSaturation = useCallback(
+        (saturation: Stats["saturation"]) => {
+            setStats({ ...stats, saturation: clampStat(saturation) });
+        },
+        [stats]
+    );
 
-    const setHydration = useCallback((hydration: Stats["hydration"]) => {
-        setStats({ ...stats, hydration: clampStat(hydration) });
-    }, []);
+    const setHydration = useCallback(
+        (hydration: Stats["hydration"]) => {
+            setStats({ ...stats, hydration: clampStat(hydration) });
+        },
+        [stats]
+    );
 
-    const setEnergy = useCallback((energy: Stats["energy"]) => {
-        setStats({ ...stats, energy: clampStat(energy) });
-    }, []);
+    const setEnergy = useCallback(
+        (energy: Stats["energy"]) => {
+            setStats({ ...stats, energy: clampStat(energy) });
+        },
+        [stats]
+    );
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
 
