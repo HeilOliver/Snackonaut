@@ -1,4 +1,7 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const statsKey = "stats";
 
 interface Stats {
     saturation: number;
@@ -45,6 +48,31 @@ const StatsProvider: React.FC = ({ children }) => {
         energy: 50,
         hydration: 50,
     });
+
+    const [statsLoaded, setStatsLoaded] = useState(false);
+
+    useEffect(() => {
+        if (statsLoaded) {
+            const saveStats = async () => {
+                await AsyncStorage.setItem(statsKey, JSON.stringify(stats));
+            };
+            saveStats();
+        }
+    }, [stats]);
+
+    useEffect(() => {
+        const loadStats = async () => {
+            const storedStats = await AsyncStorage.getItem(statsKey);
+
+            if (storedStats) {
+                setStats(JSON.parse(storedStats));
+            }
+
+            setStatsLoaded(true);
+        };
+
+        loadStats();
+    }, []);
 
     const setSaturation = (saturation: Stats["saturation"]) => {
         setStats({ ...stats, saturation: clampStat(saturation) });
