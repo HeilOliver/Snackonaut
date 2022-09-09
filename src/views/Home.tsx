@@ -1,4 +1,4 @@
-import { Button, Center } from "native-base";
+import { Button, StatusBar, View } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
@@ -10,28 +10,41 @@ const Home = ({ navigation }) => {
 
     return (
         <SafeAreaView style={ styles.container }>
-            <Center
-                _dark={ { bg: "blueGray.900" } }
-                _light={ { bg: "blueGray.50" } }
-                px={ 4 }
-                flex={ 1 }
-            >
-                <Stats/>
-                <Button onPress={ () => navigation.navigate('Camera') }>
-                    Camera
-                </Button>
-                <Button onPress={ () => navigation.navigate('Settings') }>
-                    Settings
-                </Button>
-            </Center>
-        </SafeAreaView>
+            <Stats/>
 
+            <View style={ styles.buttonRow }>
+                <Button
+                    style={ styles.button }
+                    onPress={ () => navigation.navigate('Camera') }
+                >
+                    📸
+                </Button>
+                <Button
+                    style={ styles.button }
+                    onPress={ () => navigation.navigate('Settings') }
+                >
+                    🔧
+                </Button>
+            </View>
+            <StatusBar/>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: "flex-end",
+        padding: 20,
+    },
+    buttonRow: {
+        marginTop: 20,
+        flexDirection: "row",
+        justifyContent: "space-around",
+    },
+    button: {
+        backgroundColor: "lightgrey",
+        width: "48%",
     }
 });
 
