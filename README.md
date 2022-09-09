@@ -9,4 +9,4 @@
 
 1. Clone / download
 2. run `npm i`
-3. run `npm start` or `npm start:tunnel`
+3. run `npm start` or `npm run start:tunnel`
