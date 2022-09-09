@@ -1,4 +1,4 @@
-import { Button, StatusBar, View } from "native-base";
+import {Button, Center, StatusBar, View} from "native-base";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
@@ -24,10 +24,12 @@ const Home = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Snackonout/>
+            <Center style={styles.snackonout}>
+                <Snackonout/>
+            </Center>
+            <View>
             <Stats />
             {settings.debugMode && <DebugStats />}
-
             <View style={styles.buttonRow}>
                 <Button
                     style={styles.button}
@@ -42,6 +44,7 @@ const Home = ({ navigation }: Props) => {
                     🔧
                 </Button>
             </View>
+            </View>
             <StatusBar />
         </SafeAreaView>
     );
@@ -50,8 +53,12 @@ const Home = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "flex-end",
+        justifyContent: "space-between",
         padding: 20,
+    },
+    snackonout: {
+        flex: 1,
+        justifyContent: 'center',
     },
     buttonRow: {
         marginTop: 20,
