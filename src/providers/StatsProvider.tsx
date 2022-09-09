@@ -1,14 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "./SettingsProvider";
+import Stats from "./StatsType";
+import calculateNewStats, { offlineProgression } from "../services/gameLogic";
 
 const statsKey = "stats";
-
-export interface Stats {
-    saturation: number;
-    hydration: number;
-    energy: number;
-}
 
 interface StatsContextValues {
     stats: Stats;
@@ -22,6 +18,7 @@ const initialContextValues: StatsContextValues = {
         saturation: 50,
         hydration: 50,
         energy: 50,
+        lastUpdate: 0,
     },
     setSaturation: () => {},
     setHydration: () => {},
@@ -48,6 +45,7 @@ const StatsProvider: React.FC = ({ children }) => {
         saturation: 50,
         energy: 50,
         hydration: 50,
+        lastUpdate: Date.now(),
     });
     const { settings } = useContext(SettingsContext);
 
@@ -67,7 +65,9 @@ const StatsProvider: React.FC = ({ children }) => {
             const storedStats = await AsyncStorage.getItem(statsKey);
 
             if (storedStats) {
-                setStats(JSON.parse(storedStats));
+                const loadedStats = JSON.parse(storedStats) as Stats;
+                const updatedStats = offlineProgression(loadedStats);
+                setStats(updatedStats);
             }
 
             setStatsLoaded(true);
@@ -77,34 +77,44 @@ const StatsProvider: React.FC = ({ children }) => {
     }, []);
 
     const setSaturation = (saturation: Stats["saturation"]) => {
-        setStats({ ...stats, saturation: clampStat(saturation) });
+        setStats({
+            ...stats,
+            saturation: clampStat(saturation),
+            lastUpdate: Date.now(),
+        });
     };
 
     const setHydration = (hydration: Stats["hydration"]) => {
-        setStats({ ...stats, hydration: clampStat(hydration) });
+        setStats({
+            ...stats,
+            hydration: clampStat(hydration),
+            lastUpdate: Date.now(),
+        });
     };
 
     const setEnergy = (energy: Stats["energy"]) => {
-        setStats({ ...stats, energy: clampStat(energy) });
+        setStats({
+            ...stats,
+            energy: clampStat(energy),
+            lastUpdate: Date.now(),
+        });
     };
 
     useEffect(() => {
-        let interval: NodeJS.Timer | undefined;
+        const gameInterval = setInterval(
+            () => {
+                const newStats = calculateNewStats(stats);
+                setStats({
+                    saturation: clampStat(newStats.saturation),
+                    hydration: clampStat(newStats.hydration),
+                    energy: clampStat(newStats.energy),
+                    lastUpdate: newStats.lastUpdate,
+                });
+            },
+            settings.debugMode ? 1000 : 1000 * 60
+        );
 
-        if (settings.debugMode) {
-            interval = setInterval(() => {
-                const random = Math.random();
-                if (random < 0.33) {
-                    setSaturation(stats.saturation - 10);
-                } else if (random < 0.66) {
-                    setHydration(stats.hydration - 10);
-                } else {
-                    setEnergy(stats.energy - 10);
-                }
-            }, 1000);
-        }
-
-        return () => clearInterval(interval);
+        return () => clearInterval(gameInterval);
     }, [stats, settings]);
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
