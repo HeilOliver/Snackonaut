@@ -3,33 +3,35 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DebugStats from "../components/DebugStats";
 import { Stats } from "../components/Stats";
 
 const Home = ({ navigation }) => {
     const { t } = useTranslation();
 
     return (
-        <SafeAreaView style={ styles.container }>
-            <Stats/>
+        <SafeAreaView style={styles.container}>
+            <Stats />
+            <DebugStats />
 
-            <View style={ styles.buttonRow }>
+            <View style={styles.buttonRow}>
                 <Button
-                    style={ styles.button }
-                    onPress={ () => navigation.navigate('Camera') }
+                    style={styles.button}
+                    onPress={() => navigation.navigate("Camera")}
                 >
                     📸
                 </Button>
                 <Button
-                    style={ styles.button }
-                    onPress={ () => navigation.navigate('Settings') }
+                    style={styles.button}
+                    onPress={() => navigation.navigate("Settings")}
                 >
                     🔧
                 </Button>
             </View>
-            <StatusBar/>
+            <StatusBar />
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "lightgrey",
         width: "48%",
-    }
+    },
 });
 
 export default Home;
