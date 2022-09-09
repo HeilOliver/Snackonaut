@@ -15,6 +15,11 @@ import {
 import NativeBaseIcon from "./src/components/NativeBaseIcon";
 import { Stats } from "./src/components/Stats";
 import themeConfig from "./config/theme";
+import {useTranslation} from "react-i18next";
+import i18n from "./src/services/i18n";
+
+//init i18n
+i18n;
 
 export const theme = extendTheme({ themeConfig });
 
@@ -25,6 +30,7 @@ declare module "native-base" {
 }
 
 export default function App() {
+  const {t} = useTranslation();
     return (
         <NativeBaseProvider>
             <Center
@@ -37,6 +43,7 @@ export default function App() {
                     <NativeBaseIcon />
                     <Heading size="lg">Welcome to NativeBase</Heading>
                     <HStack space={2} alignItems="center">
+                        <Text>{t("test")}</Text>
                         <Text>Edit</Text>
                         <Box
                             _web={{
