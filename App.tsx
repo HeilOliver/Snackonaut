@@ -16,7 +16,7 @@ import NativeBaseIcon from "./src/components/NativeBaseIcon";
 import { Stats } from "./src/components/Stats";
 import themeConfig from "./config/theme";
 import {useTranslation} from "react-i18next";
-import i18n from "./src/locale/i18n";
+import i18n from "./src/services/i18n";
 
 //init i18n
 i18n;

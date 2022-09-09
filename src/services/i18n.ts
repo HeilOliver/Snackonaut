@@ -1,8 +1,8 @@
 import * as Localization from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import english from "./english";
-import german from "./german";
+import english from "../locale/english";
+import german from "../locale/german";
 
 export const resources = {
     en: english,
