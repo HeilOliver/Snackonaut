@@ -14,15 +14,9 @@ import {
 } from "native-base";
 import NativeBaseIcon from "./src/components/NativeBaseIcon";
 import { Stats } from "./src/components/Stats";
+import themeConfig from "./config/theme";
 
-// Define the config
-const config = {
-    useSystemColorMode: false,
-    initialColorMode: "dark",
-};
-
-// extend the theme
-export const theme = extendTheme({ config });
+export const theme = extendTheme({ themeConfig });
 
 type MyThemeType = typeof theme;
 
@@ -76,6 +70,7 @@ export default function App() {
 // Color Switch Component
 function ToggleDarkMode() {
     const { colorMode, toggleColorMode } = useColorMode();
+
     return (
         <HStack space={2} alignItems="center">
             <Text>Dark</Text>
