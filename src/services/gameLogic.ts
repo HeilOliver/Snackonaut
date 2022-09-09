@@ -10,6 +10,7 @@ const calculateNewStats = (stats: Stats): Stats => {
         hydration: stats.hydration - reduction,
         energy: stats.energy - 10,
         lastUpdate: Date.now(),
+        name: stats.name,
     };
 };
 

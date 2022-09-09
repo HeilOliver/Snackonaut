@@ -1,4 +1,4 @@
-import { Button, Center, StatusBar, View } from "native-base";
+import { Button, Center, StatusBar, Text, View } from "native-base";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RootStackParamList from "../types/RootStackParamList";
 import { SettingsContext } from "../providers/SettingsProvider";
 import Snackonout from "../components/Snackonaut";
+import { StatsContext } from "../providers/StatsProvider";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
     RootStackParamList,
@@ -21,9 +22,13 @@ type Props = {
 
 const Home = ({ navigation }: Props) => {
     const { settings } = useContext(SettingsContext);
+    const { stats } = useContext(StatsContext);
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text fontSize="2xl" variant="h1" textAlign="center">
+                {stats.name}
+            </Text>
             <Center style={styles.snackonout}>
                 <Snackonout />
             </Center>

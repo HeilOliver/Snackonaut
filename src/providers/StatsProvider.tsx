@@ -19,6 +19,7 @@ const initialContextValues: StatsContextValues = {
         hydration: 50,
         energy: 50,
         lastUpdate: 0,
+        name: "Snackonaut",
     },
     setSaturation: () => {},
     setHydration: () => {},
@@ -40,12 +41,21 @@ const clampStat = (
     return value;
 };
 
+const applyStatsFallback = (stats: Stats): Stats => ({
+    energy: stats.energy ?? 50,
+    hydration: stats.hydration ?? 50,
+    lastUpdate: stats.lastUpdate ?? Date.now(),
+    name: stats.name ?? "Snackonaut",
+    saturation: stats.saturation ?? 50,
+});
+
 const StatsProvider: React.FC = ({ children }) => {
     const [stats, setStats] = useState<Stats>({
         saturation: 50,
         energy: 50,
         hydration: 50,
         lastUpdate: Date.now(),
+        name: "Snackonaut",
     });
     const { settings } = useContext(SettingsContext);
 
@@ -67,7 +77,16 @@ const StatsProvider: React.FC = ({ children }) => {
             if (storedStats) {
                 const loadedStats = JSON.parse(storedStats) as Stats;
                 const updatedStats = offlineProgression(loadedStats);
-                setStats(updatedStats);
+                const fallbackStats = applyStatsFallback(updatedStats);
+
+                const clampedStats: Stats = {
+                    ...fallbackStats,
+                    energy: clampStat(fallbackStats.energy),
+                    hydration: clampStat(fallbackStats.hydration),
+                    saturation: clampStat(fallbackStats.saturation),
+                };
+
+                setStats(clampedStats);
             }
 
             setStatsLoaded(true);
@@ -109,6 +128,7 @@ const StatsProvider: React.FC = ({ children }) => {
                     hydration: clampStat(newStats.hydration),
                     energy: clampStat(newStats.energy),
                     lastUpdate: newStats.lastUpdate,
+                    name: newStats.name,
                 });
             },
             settings.debugMode ? 1000 : 1000 * 60
