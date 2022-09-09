@@ -10,17 +10,35 @@ export const Stats = () => {
             <Box w="100%">
                 <VStack space="md">
                     <VStack mx="4" space="md">
-                        <Text>Saturation</Text>
+                        <Text>
+                            Saturation (
+                            {stats.saturation.toLocaleString(undefined, {
+                                maximumFractionDigits: 0,
+                            })}
+                            /100)
+                        </Text>
                         <Progress
                             colorScheme="orange"
                             value={stats.saturation}
                         />
-                        <Text>Hydration</Text>
+                        <Text>
+                            Hydration (
+                            {stats.hydration.toLocaleString(undefined, {
+                                maximumFractionDigits: 0,
+                            })}
+                            /100)
+                        </Text>
                         <Progress
                             colorScheme="lightBlue"
                             value={stats.hydration}
                         />
-                        <Text>Energy</Text>
+                        <Text>
+                            Energy(
+                            {stats.energy.toLocaleString(undefined, {
+                                maximumFractionDigits: 0,
+                            })}
+                            /100)
+                        </Text>
                         <Progress colorScheme="green" value={stats.energy} />
                     </VStack>
                 </VStack>
