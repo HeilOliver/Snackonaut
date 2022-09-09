@@ -1,7 +1,9 @@
 import { Camera } from 'expo-camera'
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useTranslation } from "react-i18next";
 import { Alert, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import * as Url from "url";
 
 let camera: Camera
 
@@ -11,6 +13,10 @@ export default function SnackCamera() {
     const [capturedImage, setCapturedImage] = React.useState<any>(null)
     const [cameraType, setCameraType] = React.useState(Camera.Constants.Type.back)
     const [flashMode, setFlashMode] = React.useState('off')
+
+    useEffect(() => {
+        // TODO
+    }, [capturedImage]);
 
     const __startCamera = async () => {
         const { status } = await Camera.requestCameraPermissionsAsync()
@@ -66,7 +72,6 @@ export default function SnackCamera() {
                     ) : (
                         <Camera
                             type={ cameraType }
-                            flashMode={ flashMode }
                             style={ { flex: 1 } }
                             ref={ (r) => {
                                 camera = r
@@ -80,50 +85,6 @@ export default function SnackCamera() {
                                     flexDirection: 'row'
                                 } }
                             >
-                                <View
-                                    style={ {
-                                        position: 'absolute',
-                                        left: '5%',
-                                        top: '10%',
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-between'
-                                    } }
-                                >
-                                    <TouchableOpacity
-                                        onPress={ __handleFlashMode }
-                                        style={ {
-                                            backgroundColor: flashMode === 'off' ? '#000' : '#fff',
-                                            borderRadius: 50,
-                                            height: 25,
-                                            width: 25
-                                        } }
-                                    >
-                                        <Text
-                                            style={ {
-                                                fontSize: 20
-                                            } }
-                                        >
-                                            ⚡️
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={ __switchCamera }
-                                        style={ {
-                                            marginTop: 20,
-                                            borderRadius: 50,
-                                            height: 25,
-                                            width: 25
-                                        } }
-                                    >
-                                        <Text
-                                            style={ {
-                                                fontSize: 20
-                                            } }
-                                        >
-                                            { cameraType === 'front' ? '🤳' : '📷' }
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
                                 <View
                                     style={ {
                                         position: 'absolute',
@@ -207,7 +168,8 @@ const styles = StyleSheet.create({
 })
 
 const CameraPreview = ({ photo, retakePicture, savePhoto }: any) => {
-    console.log('sdsfds', photo)
+    const { t } = useTranslation();
+
     return (
         <View
             style={ {
@@ -272,7 +234,7 @@ const CameraPreview = ({ photo, retakePicture, savePhoto }: any) => {
                                     fontSize: 20
                                 } }
                             >
-                                save photo
+                                { t("camera.analyzePicture") }
                             </Text>
                         </TouchableOpacity>
                     </View>

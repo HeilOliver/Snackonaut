@@ -1,6 +1,8 @@
 const english = {
     translation: {
-        analyzePicture: "Eat"
+        camera: {
+            analyzePicture: "Eat",
+        },
     },
 }
 
