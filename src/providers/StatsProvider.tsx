@@ -27,6 +27,18 @@ const initialContextValues: StatsContextValues = {
 export const StatsContext =
     React.createContext<StatsContextValues>(initialContextValues);
 
+const clampStat = (
+    value: Stats["saturation"] | Stats["hydration"] | Stats["energy"]
+) => {
+    if (value > 100) {
+        return 100;
+    } else if (value < 0) {
+        return 0;
+    }
+
+    return value;
+};
+
 const StatsProvider: React.FC = ({ children }) => {
     const [stats, setStats] = useState<Stats>({
         saturation: 100,
@@ -35,15 +47,15 @@ const StatsProvider: React.FC = ({ children }) => {
     });
 
     const setSaturation = (saturation: Stats["saturation"]) => {
-        setStats({ ...stats, saturation });
+        setStats({ ...stats, saturation: clampStat(saturation) });
     };
 
     const setHydration = (hydration: Stats["hydration"]) => {
-        setStats({ ...stats, hydration });
+        setStats({ ...stats, hydration: clampStat(hydration) });
     };
 
     const setEnergy = (energy: Stats["energy"]) => {
-        setStats({ ...stats, energy });
+        setStats({ ...stats, energy: clampStat(energy) });
     };
 
     const contextValues = { stats, setSaturation, setHydration, setEnergy };
