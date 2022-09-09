@@ -1,6 +1,8 @@
 const german = {
     translation: {
-        test: 'test-de'
+        camera: {
+            analyzePicture: "Essen"
+        }
     },
 }
 

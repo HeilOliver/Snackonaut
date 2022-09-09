@@ -22,7 +22,7 @@ import EditName from "../components/EditName";
 type HomeScreenNavigationProp = NativeStackNavigationProp<
     RootStackParamList,
     "Home"
->;
+    >;
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -49,7 +49,7 @@ const Home = ({ navigation }: Props) => {
                 <View style={styles.buttonRow}>
                     <Button
                         style={styles.button}
-                        onPress={() => navigation.navigate("Camera")}
+                        onPress={() => navigation.navigate("SnackCamera")}
                     >
                         📸
                     </Button>

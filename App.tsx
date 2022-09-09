@@ -7,7 +7,7 @@ import themeConfig from "./config/theme";
 import SettingsProvider from "./src/providers/SettingsProvider";
 import StatsProvider from "./src/providers/StatsProvider";
 import i18n from "./src/services/i18n";
-import Camera from "./src/views/Camera";
+import SnackCamera from "./src/views/SnackCamera";
 import Home from "./src/views/Home";
 import Settings from "./src/views/Settings";
 
@@ -38,8 +38,8 @@ export default function App() {
                                     options={{ headerShown: false }}
                                 />
                                 <Stack.Screen
-                                    name="Camera"
-                                    component={Camera}
+                                    name="SnackCamera"
+                                    component={SnackCamera}
                                     options={{ headerShown: false }}
                                 />
                                 <Stack.Screen

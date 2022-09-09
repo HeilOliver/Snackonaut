@@ -1,6 +1,6 @@
 type RootStackParamList = {
     'Home': undefined,
-    'Camera': undefined,
+    'SnackCamera': undefined,
     'Settings': undefined,
 }
 

@@ -1,6 +1,6 @@
 const english = {
     translation: {
-        test: 'test-en'
+        analyzePicture: "Eat"
     },
 }
 
