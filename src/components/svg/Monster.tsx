@@ -3,18 +3,21 @@ import { useEffect, useState } from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 // from: https://react-svgr.com/playground/?native=true&typescript=true
 
-const scaleOffset = 0.04;
+const scaleOffset = 0.05;
+const defaultHeight = 310;
 
 const SvgMonster = (props: SvgProps) => {
     const [scaleY, setScaleY] = useState(1);
     const [scaleX, setScaleX] = useState(1);
-    const [height, setHeight] = useState(300);
+    const [height, setHeight] = useState(defaultHeight);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setScaleY(scaleY < 1 ? 1 : scaleY - scaleOffset);
             setScaleX(scaleY === 1 ? 1 + scaleOffset : 1);
-            setHeight(scaleY === 1 ? 300 : 310);
+            setHeight(
+                scaleY === 1 ? defaultHeight : defaultHeight * (1 + scaleOffset)
+            );
         }, 700);
 
         return () => clearInterval(interval);
