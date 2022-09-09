@@ -1,25 +1,30 @@
 import { Button, StatusBar, View } from "native-base";
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DebugStats from "../components/DebugStats";
 import { Stats } from "../components/Stats";
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RootStackParamList from "../types/RootStackParamList";
+import { SettingsContext } from "../providers/SettingsProvider";
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+    RootStackParamList,
+    "Home"
+>;
 
 type Props = {
     navigation: HomeScreenNavigationProp;
-}
+};
 
 const Home = ({ navigation }: Props) => {
+    const { settings } = useContext(SettingsContext);
 
     return (
         <SafeAreaView style={styles.container}>
             <Stats />
-            <DebugStats />
+            {settings.debugMode && <DebugStats />}
 
             <View style={styles.buttonRow}>
                 <Button
