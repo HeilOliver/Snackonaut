@@ -4,6 +4,7 @@ import { extendTheme, NativeBaseProvider } from "native-base";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import themeConfig from "./config/theme";
+import SettingsProvider from "./src/providers/SettingsProvider";
 import StatsProvider from "./src/providers/StatsProvider";
 import i18n from "./src/services/i18n";
 import Camera from "./src/views/Camera";
@@ -25,30 +26,31 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
     return (
-        <StatsProvider>
-            <SafeAreaProvider>
-                <NativeBaseProvider>
-                    <NavigationContainer>
-                        <Stack.Navigator>
-                            <Stack.Screen
-                                name="Home"
-                                component={Home}
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="Camera"
-                                component={Camera}
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="Settings"
-                                component={Settings}
-                                options={{ headerShown: false }}
-                            />
-                        </Stack.Navigator>
-                    </NavigationContainer>
-                </NativeBaseProvider>
-            </SafeAreaProvider>
-        </StatsProvider>
+        <SettingsProvider>
+            <StatsProvider>
+                <SafeAreaProvider>
+                    <NativeBaseProvider>
+                        <NavigationContainer>
+                            <Stack.Navigator>
+                                <Stack.Screen
+                                    name="Home"
+                                    component={Home}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="Camera"
+                                    component={Camera}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="Settings"
+                                    component={Settings}
+                                />
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </NativeBaseProvider>
+                </SafeAreaProvider>
+            </StatsProvider>
+        </SettingsProvider>
     );
 }
