@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "./SettingsProvider";
 import Stats from "./StatsType";
-import calculateNewStats from "../services/gameLogic";
+import calculateNewStats, { offlineProgression } from "../services/gameLogic";
 
 const statsKey = "stats";
 
@@ -65,7 +65,9 @@ const StatsProvider: React.FC = ({ children }) => {
             const storedStats = await AsyncStorage.getItem(statsKey);
 
             if (storedStats) {
-                setStats(JSON.parse(storedStats));
+                const loadedStats = JSON.parse(storedStats) as Stats;
+                const updatedStats = offlineProgression(loadedStats);
+                setStats(updatedStats);
             }
 
             setStatsLoaded(true);
@@ -106,7 +108,7 @@ const StatsProvider: React.FC = ({ children }) => {
                     saturation: clampStat(newStats.saturation),
                     hydration: clampStat(newStats.hydration),
                     energy: clampStat(newStats.energy),
-                    lastUpdate: Date.now(),
+                    lastUpdate: newStats.lastUpdate,
                 });
             },
             settings.debugMode ? 1000 : 1000 * 60
