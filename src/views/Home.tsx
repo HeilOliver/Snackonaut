@@ -27,7 +27,7 @@ const Home = ({ navigation }: Props) => {
     return (
         <SafeAreaView style={styles.container}>
             <HStack>
-                <Text fontSize="2xl" variant="h1" textAlign="center" width={80}>
+                <Text fontSize="2xl" textAlign="center" width={80}>
                     {stats.name}
                 </Text>
                 <EditName />
