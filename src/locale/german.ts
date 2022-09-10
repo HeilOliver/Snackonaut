@@ -1,7 +1,8 @@
 const german = {
     translation: {
         camera: {
-            analyzePicture: "Essen"
+            analyze: "Essen",
+            retake: "Erneut",
         }
     },
 }
