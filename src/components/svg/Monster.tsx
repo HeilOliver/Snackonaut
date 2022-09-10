@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 import { StatsContext } from "../../providers/StatsProvider";
 // from: https://react-svgr.com/playground/?native=true&typescript=true
@@ -12,16 +12,22 @@ const SvgMonster = (props: SvgProps) => {
     const [scaleX, setScaleX] = useState(1);
     const [height, setHeight] = useState(defaultHeight);
 
-    const { stats } = useContext(StatsContext);
+    const { stats } = React.useContext(StatsContext);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setScaleY(scaleY < 1 ? 1 : scaleY - scaleOffset);
-            setScaleX(scaleY === 1 ? 1 + scaleOffset : 1);
-            setHeight(
-                scaleY === 1 ? defaultHeight : defaultHeight * (1 + scaleOffset)
-            );
-        }, 1000 - stats.energy * 5);
+        let interval: NodeJS.Timer | undefined;
+
+        if (stats.health > 0) {
+            interval = setInterval(() => {
+                setScaleY(scaleY < 1 ? 1 : scaleY - scaleOffset);
+                setScaleX(scaleY === 1 ? 1 + scaleOffset : 1);
+                setHeight(
+                    scaleY === 1
+                        ? defaultHeight
+                        : defaultHeight * (1 + scaleOffset)
+                );
+            }, 1000 - stats.health * 5);
+        }
 
         return () => clearInterval(interval);
     }, [scaleY, stats]);

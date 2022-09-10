@@ -1,31 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "./SettingsProvider";
-import Stats from "./StatsType";
+import Stats, { dailyCOnsumption, maxValues, minValues } from "./StatsType";
 import calculateNewStats, { offlineProgression } from "../services/gameLogic";
 
 const statsKey = "stats";
 
 interface StatsContextValues {
     stats: Stats;
-    setSaturation: (saturation: Stats["saturation"]) => void;
-    setHydration: (saturation: Stats["hydration"]) => void;
+    setHealth: (saturation: Stats["health"]) => void;
+    setWeight: (saturation: Stats["weight"]) => void;
     setEnergy: (saturation: Stats["energy"]) => void;
     setName: (name: Stats["name"]) => void;
 }
 
 const defaultStats: Stats = {
-    saturation: 50,
-    hydration: 50,
-    energy: 50,
+    health: 90,
+    weight: 75,
+    energy: 1000,
     lastUpdate: Date.now(),
     name: "Snackonaut",
 };
 
 const initialContextValues: StatsContextValues = {
     stats: defaultStats,
-    setSaturation: () => {},
-    setHydration: () => {},
+    setHealth: () => {},
+    setWeight: () => {},
     setEnergy: () => {},
     setName: () => {},
 };
@@ -33,13 +33,11 @@ const initialContextValues: StatsContextValues = {
 export const StatsContext =
     React.createContext<StatsContextValues>(initialContextValues);
 
-const clampStat = (
-    value: Stats["saturation"] | Stats["hydration"] | Stats["energy"]
-) => {
-    if (value > 100) {
-        return 100;
-    } else if (value < 0) {
-        return 0;
+const clampStat = (value: number, max: number, min: number) => {
+    if (value > max) {
+        return max;
+    } else if (value < min) {
+        return min;
     }
 
     return value;
@@ -47,10 +45,10 @@ const clampStat = (
 
 const applyStatsFallback = (stats: Stats): Stats => ({
     energy: stats.energy ?? defaultStats.energy,
-    hydration: stats.hydration ?? defaultStats.hydration,
+    weight: stats.weight ?? defaultStats.weight,
     lastUpdate: stats.lastUpdate ?? defaultStats.lastUpdate,
     name: stats.name ?? defaultStats.name,
-    saturation: stats.saturation ?? defaultStats.saturation,
+    health: stats.health ?? defaultStats.health,
 });
 
 const StatsProvider: React.FC = ({ children }) => {
@@ -78,9 +76,21 @@ const StatsProvider: React.FC = ({ children }) => {
 
                 const clampedStats: Stats = {
                     ...fallbackStats,
-                    energy: clampStat(fallbackStats.energy),
-                    hydration: clampStat(fallbackStats.hydration),
-                    saturation: clampStat(fallbackStats.saturation),
+                    energy: clampStat(
+                        fallbackStats.energy,
+                        maxValues.energy,
+                        minValues.energy
+                    ),
+                    health: clampStat(
+                        fallbackStats.health,
+                        maxValues.health,
+                        minValues.health
+                    ),
+                    weight: clampStat(
+                        fallbackStats.weight,
+                        maxValues.weight,
+                        minValues.weight
+                    ),
                 };
 
                 setStats(clampedStats);
@@ -92,18 +102,18 @@ const StatsProvider: React.FC = ({ children }) => {
         loadStats();
     }, []);
 
-    const setSaturation = (saturation: Stats["saturation"]) => {
+    const setHealth = (health: Stats["health"]) => {
         setStats({
             ...stats,
-            saturation: clampStat(saturation),
+            health: clampStat(health, maxValues.health, minValues.health),
             lastUpdate: Date.now(),
         });
     };
 
-    const setHydration = (hydration: Stats["hydration"]) => {
+    const setWeight = (weight: Stats["weight"]) => {
         setStats({
             ...stats,
-            hydration: clampStat(hydration),
+            weight: clampStat(weight, maxValues.weight, minValues.weight),
             lastUpdate: Date.now(),
         });
     };
@@ -111,7 +121,7 @@ const StatsProvider: React.FC = ({ children }) => {
     const setEnergy = (energy: Stats["energy"]) => {
         setStats({
             ...stats,
-            energy: clampStat(energy),
+            energy: clampStat(energy, maxValues.energy, minValues.energy),
             lastUpdate: Date.now(),
         });
     };
@@ -127,9 +137,21 @@ const StatsProvider: React.FC = ({ children }) => {
             () => {
                 const newStats = calculateNewStats(stats);
                 setStats({
-                    saturation: clampStat(newStats.saturation),
-                    hydration: clampStat(newStats.hydration),
-                    energy: clampStat(newStats.energy),
+                    weight: clampStat(
+                        newStats.weight,
+                        maxValues.weight,
+                        minValues.weight
+                    ),
+                    health: clampStat(
+                        newStats.health,
+                        maxValues.health,
+                        minValues.health
+                    ),
+                    energy: clampStat(
+                        newStats.energy,
+                        maxValues.energy,
+                        minValues.energy
+                    ),
                     lastUpdate: newStats.lastUpdate,
                     name: newStats.name,
                 });
@@ -142,8 +164,8 @@ const StatsProvider: React.FC = ({ children }) => {
 
     const contextValues = {
         stats,
-        setSaturation,
-        setHydration,
+        setHealth,
+        setWeight,
         setEnergy,
         setName,
     };

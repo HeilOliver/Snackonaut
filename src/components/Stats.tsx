@@ -1,6 +1,7 @@
 import { Box, Center, Progress, VStack, Text } from "native-base";
 import React, { useContext } from "react";
 import { StatsContext } from "../providers/StatsProvider";
+import { dailyCOnsumption, maxValues, minValues } from "../providers/StatsType";
 
 export const Stats = () => {
     const { stats } = useContext(StatsContext);
@@ -11,35 +12,37 @@ export const Stats = () => {
                 <VStack space="md">
                     <VStack mx="4" space="md">
                         <Text>
-                            Saturation (
-                            {stats.saturation.toLocaleString(undefined, {
-                                maximumFractionDigits: 0,
-                            })}
-                            /100)
+                            Energy ({Math.floor(stats.energy)}/
+                            {maxValues.energy})
                         </Text>
                         <Progress
-                            colorScheme="orange"
-                            value={stats.saturation}
+                            colorScheme="green"
+                            value={stats.energy}
+                            min={minValues.energy}
+                            max={maxValues.energy}
                         />
+
                         <Text>
-                            Hydration (
-                            {stats.hydration.toLocaleString(undefined, {
-                                maximumFractionDigits: 0,
-                            })}
-                            /100)
+                            Weight ({Math.floor(stats.weight)}/
+                            {maxValues.weight})
                         </Text>
                         <Progress
                             colorScheme="lightBlue"
-                            value={stats.hydration}
+                            value={stats.weight}
+                            min={minValues.weight}
+                            max={maxValues.weight}
                         />
+
                         <Text>
-                            Energy (
-                            {stats.energy.toLocaleString(undefined, {
-                                maximumFractionDigits: 0,
-                            })}
-                            /100)
+                            Health ({Math.floor(stats.health)}/
+                            {maxValues.health})
                         </Text>
-                        <Progress colorScheme="green" value={stats.energy} />
+                        <Progress
+                            colorScheme="red"
+                            value={stats.health}
+                            min={minValues.health}
+                            max={maxValues.health}
+                        />
                     </VStack>
                 </VStack>
             </Box>

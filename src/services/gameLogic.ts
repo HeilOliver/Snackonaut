@@ -1,21 +1,41 @@
-import Stats from "../providers/StatsType";
+import Stats, { dailyCOnsumption } from "../providers/StatsType";
 
-const calculateReduction = (energy: Stats["energy"]) => energy * -0.1 + 15;
+const calculateWeight = (stats: Stats) => {
+    if (stats.energy > 2100) {
+        return stats.weight + 2;
+    } else if (stats.energy < 700) {
+        return stats.weight - 2;
+    }
+
+    return stats.weight;
+};
+
+const calculateHealth = (stats: Stats) => {
+    if (stats.weight > 90) {
+        return stats.health - 1;
+    } else if (stats.weight < 60) {
+        return stats.health - 1;
+    }
+
+    if (stats.energy < 2100 && stats.energy > 700) {
+        return stats.health + 1;
+    }
+
+    return stats.health;
+};
 
 const calculateNewStats = (stats: Stats): Stats => {
-    const reduction = calculateReduction(stats.energy);
-
     return {
-        saturation: stats.saturation - reduction,
-        hydration: stats.hydration - reduction,
-        energy: stats.energy - 10,
+        energy: stats.energy - dailyCOnsumption.energy / 24,
+        weight: calculateWeight(stats),
+        health: calculateHealth(stats),
         lastUpdate: Date.now(),
         name: stats.name,
     };
 };
 
 export const checkDeath = (stats: Stats): boolean => {
-    return stats.energy <= 0 && stats.hydration <= 0 && stats.saturation <= 0;
+    return stats.health <= 0;
 };
 
 export const offlineProgression = (stats: Stats): Stats => {
