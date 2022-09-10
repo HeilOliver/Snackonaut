@@ -15,11 +15,11 @@ interface StatsContextValues {
 }
 
 const defaultStats: Stats = {
-    health: 90,
-    weight: 75,
-    energy: 1000,
+    health: 90 as const,
+    weight: 75 as const,
+    energy: 1500 as const,
     lastUpdate: Date.now(),
-    name: "Snackonaut",
+    name: "Snackonaut" as const,
 };
 
 const initialContextValues: StatsContextValues = {
