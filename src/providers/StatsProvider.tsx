@@ -11,6 +11,7 @@ interface StatsContextValues {
     setSaturation: (saturation: Stats["saturation"]) => void;
     setHydration: (saturation: Stats["hydration"]) => void;
     setEnergy: (saturation: Stats["energy"]) => void;
+    setName: (name: Stats["name"]) => void;
 }
 
 const initialContextValues: StatsContextValues = {
@@ -24,6 +25,7 @@ const initialContextValues: StatsContextValues = {
     setSaturation: () => {},
     setHydration: () => {},
     setEnergy: () => {},
+    setName: () => {},
 };
 
 export const StatsContext =
@@ -118,6 +120,12 @@ const StatsProvider: React.FC = ({ children }) => {
             lastUpdate: Date.now(),
         });
     };
+    const setName = (name: Stats["name"]) => {
+        setStats({
+            ...stats,
+            name,
+        });
+    };
 
     useEffect(() => {
         const gameInterval = setInterval(
@@ -137,7 +145,13 @@ const StatsProvider: React.FC = ({ children }) => {
         return () => clearInterval(gameInterval);
     }, [stats, settings]);
 
-    const contextValues = { stats, setSaturation, setHydration, setEnergy };
+    const contextValues = {
+        stats,
+        setSaturation,
+        setHydration,
+        setEnergy,
+        setName,
+    };
 
     return (
         <StatsContext.Provider value={contextValues}>
