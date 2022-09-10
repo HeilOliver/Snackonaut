@@ -60,7 +60,7 @@ const EditName = () => {
                         <Button
                             variant="ghost"
                             onPress={() => {
-                                setName(editName);
+                                setName(editName.trim());
                                 setEditOpen(false);
                             }}
                         >
