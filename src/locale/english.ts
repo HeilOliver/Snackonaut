@@ -1,10 +1,5 @@
 const english = {
-    translation: {
-        camera: {
-            analyze: "Eat",
-            retake: "Retake",
-        },
-    },
+    translation: {},
 }
 
 export default english;
