@@ -21,8 +21,6 @@ const calculateHealth = (stats: Stats) => {
 
     if (stats.energy > 2100 || stats.energy < 700) {
         --healthChange;
-    } else {
-        ++healthChange;
     }
 
     return stats.health + healthChange;
