@@ -1,20 +1,19 @@
 import { useContext } from "react";
 import { StatsContext } from "../providers/StatsProvider";
-import Stats from "../providers/StatsType";
 import SvgMonster from "./svg/Monster";
+import SvgDead from "./svg/Dead";
+import SvgSick from "./svg/Sick";
 
-const emotionSum = (stats: Stats) => {
-    return Object.values(stats).reduce((a, b) => a + b, 0);
-};
-
-const Snackonout = () => {
+const Snackonaut = () => {
     const { stats } = useContext(StatsContext);
-    const emotion = emotionSum(stats);
 
-    switch (emotion) {
-        default:
-            return <SvgMonster />;
+    if(stats.health <= 0) {
+        return <SvgDead/>
+    } if(stats.health < 20) {
+        return <SvgSick/>
+    } else {
+        return <SvgMonster />;
     }
 };
 
-export default Snackonout;
+export default Snackonaut;
