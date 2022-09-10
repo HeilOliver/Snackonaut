@@ -44,11 +44,20 @@ const clampStat = (value: number, max: number, min: number) => {
 };
 
 const applyStatsFallback = (stats: Stats): Stats => ({
-    energy: stats.energy ?? defaultStats.energy,
-    weight: stats.weight ?? defaultStats.weight,
+    energy:
+        !stats.energy || Number.isNaN(stats.energy)
+            ? defaultStats.energy
+            : stats.energy,
+    weight:
+        !stats.weight || Number.isNaN(stats.weight)
+            ? defaultStats.weight
+            : stats.weight,
     lastUpdate: stats.lastUpdate ?? defaultStats.lastUpdate,
     name: stats.name ?? defaultStats.name,
-    health: stats.health ?? defaultStats.health,
+    health:
+        !stats.health || Number.isNaN(stats.health)
+            ? defaultStats.health
+            : stats.health,
 });
 
 const StatsProvider: React.FC = ({ children }) => {
