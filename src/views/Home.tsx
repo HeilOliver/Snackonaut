@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Center,
     HStack,
@@ -15,7 +14,7 @@ import { Stats } from "../components/Stats";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RootStackParamList from "../types/RootStackParamList";
 import { SettingsContext } from "../providers/SettingsProvider";
-import Snackonout from "../components/Snackonaut";
+import Snackonaut from "../components/Snackonaut";
 import { StatsContext } from "../providers/StatsProvider";
 import EditName from "../components/EditName";
 
@@ -41,7 +40,7 @@ const Home = ({ navigation }: Props) => {
                 <EditName />
             </HStack>
             <Center style={styles.snackonout}>
-                <Snackonout />
+                <Snackonaut />
             </Center>
             <View>
                 <Stats />
