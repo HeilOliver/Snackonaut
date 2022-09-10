@@ -1,13 +1,21 @@
+import { useNavigation } from "@react-navigation/native";
 import { Camera, PermissionStatus, requestCameraPermissionsAsync } from 'expo-camera'
 import { CameraCapturedPicture } from "expo-camera/src/Camera.types";
+import { manipulateAsync } from "expo-image-manipulator";
 import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useState } from 'react'
+import { useToast } from "native-base";
+import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import CameraPreview from "../components/CameraPreview";
+import { StatsContext } from "../providers/StatsProvider";
 
 let camera: Camera
 
-export default function SnackCamera() {
+const SnackCamera = ({ navigation: { navigate }}): JSX.Element => {
+    const toast = useToast();
+    const { t } = useTranslation();
+    const { stats, setEnergy } = useContext(StatsContext);
     const [startCamera, setStartCamera] = useState<boolean>(false)
     const [previewVisible, setPreviewVisible] = useState<boolean>(false)
     const [capturedImage, setCapturedImage] = useState<CameraCapturedPicture|null>(null)
@@ -19,7 +27,6 @@ export default function SnackCamera() {
     const __startCamera = async (): Promise<void> => {
         const {status} = await requestCameraPermissionsAsync()
 
-        console.log(status)
         if (PermissionStatus.GRANTED === status) {
             setStartCamera(true)
         } else {
@@ -27,24 +34,45 @@ export default function SnackCamera() {
         }
     }
 
-    const __takePicture = async () => {
+    const takePicture = async (): Promise<void> => {
         const photo: CameraCapturedPicture = await camera.takePictureAsync({base64: true})
 
         setPreviewVisible(true)
         setCapturedImage(photo)
     }
-    const __savePhoto = async () => {
+
+    const analyzePhoto = async (): Promise<void> => {
+        if (null === capturedImage) {
+            return;
+        }
+
+        const resizedImage = await manipulateAsync(
+            capturedImage?.uri,
+            [{
+                resize: {
+                    width: 512,
+                },
+            }],
+            {
+                compress: 0.0,
+                base64: true,
+            }
+        );
+
         try {
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ imageBase64: capturedImage?.base64 })
+                body: JSON.stringify({ imageBase64: resizedImage?.base64 })
             };
             let response = await fetch(
                 'https://snackonaut.jentschmann.services/Prediction', requestOptions
             );
             let json = await response.json();
-            console.log(json);
+
+            toast.show({description: t("eat_toast", { response: json.label }), placement: "top"})
+            setEnergy(stats.energy + json.energy)
+            navigate("Home")
         } catch (error) {
             console.error(error);
         }
@@ -66,7 +94,7 @@ export default function SnackCamera() {
                     }}
                 >
                     {previewVisible && capturedImage ? (
-                        <CameraPreview photo={capturedImage} savePhoto={__savePhoto} retakePicture={__retakePicture} />
+                        <CameraPreview photo={capturedImage} savePhoto={analyzePhoto} retakePicture={__retakePicture} />
                     ) : (
                         <Camera
                             type="back"
@@ -102,7 +130,7 @@ export default function SnackCamera() {
                                         }}
                                     >
                                         <TouchableOpacity
-                                            onPress={__takePicture}
+                                            onPress={takePicture}
                                             style={{
                                                 width: 85,
                                                 height: 85,
@@ -134,3 +162,4 @@ const styles = StyleSheet.create({
     }
 })
 
+export default SnackCamera;
