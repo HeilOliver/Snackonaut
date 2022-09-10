@@ -1,7 +1,5 @@
 const german = {
-    translation: {
-        test: 'test-de'
-    },
+    translation: {},
 }
 
 export default german;
