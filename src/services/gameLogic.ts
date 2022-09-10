@@ -11,17 +11,21 @@ const calculateWeight = (stats: Stats) => {
 };
 
 const calculateHealth = (stats: Stats) => {
-    if (stats.weight > 90) {
-        return stats.health - 1;
-    } else if (stats.weight < 60) {
-        return stats.health - 1;
+    let healthChange = 0;
+
+    if (stats.weight > 90 || stats.weight < 60) {
+        --healthChange;
+    } else {
+        ++healthChange;
     }
 
-    if (stats.energy < 2100 && stats.energy > 700) {
-        return stats.health + 1;
+    if (stats.energy > 2100 || stats.energy < 700) {
+        --healthChange;
+    } else {
+        ++healthChange;
     }
 
-    return stats.health;
+    return stats.health + healthChange;
 };
 
 const calculateNewStats = (stats: Stats): Stats => {
