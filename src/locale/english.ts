@@ -1,5 +1,7 @@
 const english = {
-    translation: {},
+    translation: {
+        eat_toast: "Yummi! 😏 {{response}} 🤤"
+    },
 }
 
 export default english;
