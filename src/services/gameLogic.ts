@@ -1,13 +1,21 @@
 import Stats, { dailyCOnsumption } from "../providers/StatsType";
 
 const calculateWeight = (stats: Stats) => {
+    let weightChange = 0;
+
     if (stats.energy > 2100) {
-        return stats.weight + 2;
-    } else if (stats.energy < 700) {
-        return stats.weight - 2;
+        weightChange += 2;
+    } else if (stats.energy < 900) {
+        weightChange -= 2;
     }
 
-    return stats.weight;
+    if (stats.energy > 2400) {
+        ++weightChange;
+    } else if (stats.energy < 300) {
+        --weightChange;
+    }
+
+    return stats.weight + weightChange;
 };
 
 const calculateHealth = (stats: Stats) => {
@@ -19,7 +27,15 @@ const calculateHealth = (stats: Stats) => {
         ++healthChange;
     }
 
-    if (stats.energy > 2100 || stats.energy < 700) {
+    if (stats.weight > 110 || stats.weight < 45) {
+        --healthChange;
+    }
+
+    if (stats.energy > 2400 || stats.energy < 700) {
+        --healthChange;
+    }
+
+    if (stats.energy < 300) {
         --healthChange;
     }
 
