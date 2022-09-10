@@ -11,18 +11,23 @@ interface StatsContextValues {
     setSaturation: (saturation: Stats["saturation"]) => void;
     setHydration: (saturation: Stats["hydration"]) => void;
     setEnergy: (saturation: Stats["energy"]) => void;
+    setName: (name: Stats["name"]) => void;
 }
 
+const defaultStats: Stats = {
+    saturation: 50,
+    hydration: 50,
+    energy: 50,
+    lastUpdate: Date.now(),
+    name: "Snackonaut",
+};
+
 const initialContextValues: StatsContextValues = {
-    stats: {
-        saturation: 50,
-        hydration: 50,
-        energy: 50,
-        lastUpdate: 0,
-    },
+    stats: defaultStats,
     setSaturation: () => {},
     setHydration: () => {},
     setEnergy: () => {},
+    setName: () => {},
 };
 
 export const StatsContext =
@@ -40,15 +45,17 @@ const clampStat = (
     return value;
 };
 
-const StatsProvider: React.FC = ({ children }) => {
-    const [stats, setStats] = useState<Stats>({
-        saturation: 50,
-        energy: 50,
-        hydration: 50,
-        lastUpdate: Date.now(),
-    });
-    const { settings } = useContext(SettingsContext);
+const applyStatsFallback = (stats: Stats): Stats => ({
+    energy: stats.energy ?? defaultStats.energy,
+    hydration: stats.hydration ?? defaultStats.hydration,
+    lastUpdate: stats.lastUpdate ?? defaultStats.lastUpdate,
+    name: stats.name ?? defaultStats.name,
+    saturation: stats.saturation ?? defaultStats.saturation,
+});
 
+const StatsProvider: React.FC = ({ children }) => {
+    const [stats, setStats] = useState<Stats>(defaultStats);
+    const { settings } = useContext(SettingsContext);
     const [statsLoaded, setStatsLoaded] = useState(false);
 
     useEffect(() => {
@@ -67,7 +74,16 @@ const StatsProvider: React.FC = ({ children }) => {
             if (storedStats) {
                 const loadedStats = JSON.parse(storedStats) as Stats;
                 const updatedStats = offlineProgression(loadedStats);
-                setStats(updatedStats);
+                const fallbackStats = applyStatsFallback(updatedStats);
+
+                const clampedStats: Stats = {
+                    ...fallbackStats,
+                    energy: clampStat(fallbackStats.energy),
+                    hydration: clampStat(fallbackStats.hydration),
+                    saturation: clampStat(fallbackStats.saturation),
+                };
+
+                setStats(clampedStats);
             }
 
             setStatsLoaded(true);
@@ -99,6 +115,12 @@ const StatsProvider: React.FC = ({ children }) => {
             lastUpdate: Date.now(),
         });
     };
+    const setName = (name: Stats["name"]) => {
+        setStats({
+            ...stats,
+            name,
+        });
+    };
 
     useEffect(() => {
         const gameInterval = setInterval(
@@ -109,6 +131,7 @@ const StatsProvider: React.FC = ({ children }) => {
                     hydration: clampStat(newStats.hydration),
                     energy: clampStat(newStats.energy),
                     lastUpdate: newStats.lastUpdate,
+                    name: newStats.name,
                 });
             },
             settings.debugMode ? 1000 : 1000 * 60
@@ -117,7 +140,13 @@ const StatsProvider: React.FC = ({ children }) => {
         return () => clearInterval(gameInterval);
     }, [stats, settings]);
 
-    const contextValues = { stats, setSaturation, setHydration, setEnergy };
+    const contextValues = {
+        stats,
+        setSaturation,
+        setHydration,
+        setEnergy,
+        setName,
+    };
 
     return (
         <StatsContext.Provider value={contextValues}>

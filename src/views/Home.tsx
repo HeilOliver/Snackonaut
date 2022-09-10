@@ -1,6 +1,13 @@
-import { Button, Center, StatusBar, View } from "native-base";
+import {
+    Box,
+    Button,
+    Center,
+    HStack,
+    StatusBar,
+    Text,
+    View,
+} from "native-base";
 import React, { useContext } from "react";
-import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DebugStats from "../components/DebugStats";
@@ -9,6 +16,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RootStackParamList from "../types/RootStackParamList";
 import { SettingsContext } from "../providers/SettingsProvider";
 import Snackonout from "../components/Snackonaut";
+import { StatsContext } from "../providers/StatsProvider";
+import EditName from "../components/EditName";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
     RootStackParamList,
@@ -21,9 +30,16 @@ type Props = {
 
 const Home = ({ navigation }: Props) => {
     const { settings } = useContext(SettingsContext);
+    const { stats } = useContext(StatsContext);
 
     return (
         <SafeAreaView style={styles.container}>
+            <HStack>
+                <Text fontSize="2xl" textAlign="center" width={80}>
+                    {stats.name}
+                </Text>
+                <EditName />
+            </HStack>
             <Center style={styles.snackonout}>
                 <Snackonout />
             </Center>
@@ -55,6 +71,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "space-between",
         padding: 20,
+        minHeight: 700,
     },
     snackonout: {
         flex: 1,

@@ -3,4 +3,5 @@ export default interface Stats {
     hydration: number;
     energy: number;
     lastUpdate: number;
+    name: string;
 }
