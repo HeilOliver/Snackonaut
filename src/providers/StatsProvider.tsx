@@ -14,14 +14,16 @@ interface StatsContextValues {
     setName: (name: Stats["name"]) => void;
 }
 
+const defaultStats: Stats = {
+    saturation: 50,
+    hydration: 50,
+    energy: 50,
+    lastUpdate: Date.now(),
+    name: "Snackonaut",
+};
+
 const initialContextValues: StatsContextValues = {
-    stats: {
-        saturation: 50,
-        hydration: 50,
-        energy: 50,
-        lastUpdate: 0,
-        name: "Snackonaut",
-    },
+    stats: defaultStats,
     setSaturation: () => {},
     setHydration: () => {},
     setEnergy: () => {},
@@ -44,23 +46,16 @@ const clampStat = (
 };
 
 const applyStatsFallback = (stats: Stats): Stats => ({
-    energy: stats.energy ?? 50,
-    hydration: stats.hydration ?? 50,
-    lastUpdate: stats.lastUpdate ?? Date.now(),
-    name: stats.name ?? "Snackonaut",
-    saturation: stats.saturation ?? 50,
+    energy: stats.energy ?? defaultStats.energy,
+    hydration: stats.hydration ?? defaultStats.hydration,
+    lastUpdate: stats.lastUpdate ?? defaultStats.lastUpdate,
+    name: stats.name ?? defaultStats.name,
+    saturation: stats.saturation ?? defaultStats.saturation,
 });
 
 const StatsProvider: React.FC = ({ children }) => {
-    const [stats, setStats] = useState<Stats>({
-        saturation: 50,
-        energy: 50,
-        hydration: 50,
-        lastUpdate: Date.now(),
-        name: "Snackonaut",
-    });
+    const [stats, setStats] = useState<Stats>(defaultStats);
     const { settings } = useContext(SettingsContext);
-
     const [statsLoaded, setStatsLoaded] = useState(false);
 
     useEffect(() => {
