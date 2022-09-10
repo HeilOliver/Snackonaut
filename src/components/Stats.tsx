@@ -33,7 +33,7 @@ export const Stats = () => {
                             value={stats.hydration}
                         />
                         <Text>
-                            Energy(
+                            Energy (
                             {stats.energy.toLocaleString(undefined, {
                                 maximumFractionDigits: 0,
                             })}
