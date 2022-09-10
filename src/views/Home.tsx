@@ -1,4 +1,12 @@
-import { Button, Center, HStack, StatusBar, Text, View } from "native-base";
+import {
+    Box,
+    Button,
+    Center,
+    HStack,
+    StatusBar,
+    Text,
+    View,
+} from "native-base";
 import React, { useContext } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -63,6 +71,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "space-between",
         padding: 20,
+        minHeight: 700,
     },
     snackonout: {
         flex: 1,
